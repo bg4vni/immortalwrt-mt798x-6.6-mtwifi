@@ -35,6 +35,11 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
+      - name: Apply 112M patch and feeds
+        run: |
+          chmod +x diy.sh
+          ./diy.sh
+
       - name: Load verified NX30 Pro config
         run: |  
           cp configs/nx30pro-112m.config .config
