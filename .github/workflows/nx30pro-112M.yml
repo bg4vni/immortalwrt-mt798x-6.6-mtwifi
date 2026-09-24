@@ -1,4 +1,4 @@
-name: Build NX30 Pro NMBM
+name: Build NX30 Pro 112M
 
 on:
   workflow_dispatch:
@@ -37,15 +37,15 @@ jobs:
 
       - name: Load verified NX30 Pro config
         run: |  
-          cp configs/nx30pro-nmbm.config .config
+          cp configs/nx30pro-112m.config .config
           make defconfig
 
       - name: Validate selected config
         run: |
           grep -qx 'CONFIG_TARGET_mediatek=y' .config
           grep -qx 'CONFIG_TARGET_mediatek_filogic=y' .config
-          grep -qx 'CONFIG_TARGET_mediatek_filogic_DEVICE_h3c_magic-nx30-pro-nmbm=y' .config
-          grep -qx 'CONFIG_TARGET_PROFILE="DEVICE_h3c_magic-nx30-pro-nmbm"' .config
+          grep -qx 'CONFIG_TARGET_mediatek_filogic_DEVICE_h3c_magic-nx30-pro-112m=y' .config
+          grep -qx 'CONFIG_TARGET_PROFILE="DEVICE_h3c_magic-nx30-pro-112m"' .config
           grep -qx 'CONFIG_PACKAGE_luci-app-mtwifi-cfg=y' .config
           grep -qx 'CONFIG_PACKAGE_luci-i18n-mtwifi-cfg-zh-cn=y' .config
           grep -qx 'CONFIG_PACKAGE_luci-app-turboacc-mtk=y' .config
