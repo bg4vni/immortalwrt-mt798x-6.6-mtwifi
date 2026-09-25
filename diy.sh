@@ -31,7 +31,7 @@ TARGET_DEVICES += h3c_magic-nx30-pro-112m
 EOF
 
 # 1. 将默认IP修改为192.168.100.1
-sed -i 's/192.168.1.1/192.168.100.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.6.1/192.168.100.1/g' package/base-files/files/bin/config_generate
 
 # 2. 添加 Nikki 官方软件源
 echo 'src-git nikki https://github.com/nikkinikki-org/OpenWrt-nikki.git;main' >> feeds.conf.default
