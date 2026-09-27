@@ -33,10 +33,7 @@ mv -f temp_passwall/v2ray-geodata feeds/packages/net/v2ray-geodata
 rm -rf temp_passwall
 
 # 4. 打印版本号确认
-GO_VER=$(grep -m1 'PKG_VERSION' feeds/packages/lang/golang/golang/Makefile 2>/dev/null \
-
-      || grep -m1 'GO_VERSION' feeds/packages/lang/golang/golang-values.mk 2>/dev/null \
-      || echo "未知")
+GO_VER=$(grep -m1 'PKG_VERSION' feeds/packages/lang/golang/golang/Makefile 2>/dev/null | cut -d= -f2 || grep -m1 'GO_VERSION' feeds/packages/lang/golang/golang-values.mk 2>/dev/null | cut -d= -f2 || echo "最新版")
 echo "[diy2] ========================================"
 echo "[diy2] golang: $GO_VER"
 echo "[diy2] xray-core: $(grep -m1 PKG_VERSION feeds/packages/net/xray-core/Makefile)"
