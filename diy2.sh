@@ -32,7 +32,12 @@ mv -f temp_passwall/v2ray-geodata feeds/packages/net/v2ray-geodata
 #  清理临时目录
 rm -rf temp_passwall
 
-# 4. 打印版本号确认
+# 5. 【关键一步】重新刷新 feeds 索引并安装软链接
+echo "[diy2] 正在刷新 feeds 索引..."
+./scripts/feeds update -i -p packages
+./scripts/feeds install -p packages -f golang xray-core v2ray-geodata
+
+# 6. 打印版本号确认
 GO_VER=$(grep -m1 'GO_VERSION:=' feeds/packages/lang/golang/golang-values.mk 2>/dev/null | cut -d'=' -f2 | tr -d ' ' || echo "最新版")
 echo "[diy2] ========================================"
 echo "[diy2] golang: $GO_VER"
