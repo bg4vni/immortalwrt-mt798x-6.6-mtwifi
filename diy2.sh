@@ -37,8 +37,11 @@ echo "[diy2] 已成功将 GOTOOLCHAIN 修改为 auto"
 
 # . 【关键一步】重新刷新 feeds 索引并安装软链接
 echo "[diy2] 正在刷新 feeds 索引..."
-#./scripts/feeds update -i -p packages
+./scripts/feeds update -i -p packages
 ./scripts/feeds install -p packages -f golang xray-core v2ray-geodata
+
+# 6. 【补上这一行】刷新配置，让新版 golang1.27/host 和缺失的依赖生效
+make defconfig > /dev/null 2>&1
 
 
 # 6. 打印版本号确认
