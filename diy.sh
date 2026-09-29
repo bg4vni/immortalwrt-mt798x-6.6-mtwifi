@@ -42,3 +42,14 @@ echo 'src-git passwall2 https://github.com/Openwrt-Passwall/openwrt-passwall2.gi
 
 # 5. 添加luci-adguardhome软件源
 echo 'src-git adguardhome https://github.com/kenzok8/openwrt-packages.git;master' >> feeds.conf.default
+
+# 6. 【关键解决】：强行覆盖系统的 distfeeds.conf，使用 OpenWrt 官方 24.10 软件源
+mkdir -p package/base-files/files/etc/opkg/
+cat << 'EOF' > package/base-files/files/etc/opkg/distfeeds.conf
+src/gz openwrt_core https://downloads.openwrt.org/releases/24.10.0/targets/mediatek/filogic/packages
+src/gz openwrt_base https://downloads.openwrt.org/releases/24.10.0/packages/aarch64_cortex-a53/base
+src/gz openwrt_luci https://downloads.openwrt.org/releases/24.10.0/packages/aarch64_cortex-a53/luci
+src/gz openwrt_packages https://downloads.openwrt.org/releases/24.10.0/packages/aarch64_cortex-a53/packages
+src/gz openwrt_routing https://downloads.openwrt.org/releases/24.10.0/packages/aarch64_cortex-a53/routing
+src/gz openwrt_telephony https://downloads.openwrt.org/releases/24.10.0/packages/aarch64_cortex-a53/telephony
+EOF
