@@ -7,6 +7,7 @@ echo "[diy2] 开始替换 xray-core 和 v2ray-geodata"
 [ -d feeds/packages/lang/golang ] && rm -rf feeds/packages/lang/golang
 [ -d feeds/packages/net/xray-core ] && rm -rf feeds/packages/net/xray-core
 [ -d feeds/packages/net/v2ray-geodata ] && rm -rf feeds/packages/net/v2ray-geodata
+[ -d feeds/packages/net/adguardhome ] && rm -rf feeds/packages/net/adguardhome
 
 # 2. 稀疏拉取 openwrt/packages 的整个 lang/golang 模块
 git clone --depth 1 --filter=blob:none --sparse https://github.com/openwrt/packages.git temp_pkgs
@@ -30,21 +31,27 @@ mv -f temp_passwall/v2ray-geodata feeds/packages/net/v2ray-geodata
 #  清理临时目录
 rm -rf temp_passwall
 
-# 4. 解除 GOTOOLCHAIN 限制并强制校验
+# 4. 稀疏拉取 kenzok8/openwrt-packages 中的最新 adguardhome (0.107.79) 覆盖旧版
+git clone --depth 1 --filter=blob:none --sparse https://github.com/kenzok8/openwrt-packages.git temp_kenzo
+git -C temp_kenzo sparse-checkout set adguardhome
+mv -f temp_kenzo/adguardhome feeds/packages/net/adguardhome
+rm -rf temp_kenzo
+
+# 5. 解除 GOTOOLCHAIN 限制并强制校验
 sed -i 's/GOTOOLCHAIN=local/GOTOOLCHAIN=auto/g' feeds/packages/lang/golang/golang-package.mk
 grep -q "GOTOOLCHAIN=auto" feeds/packages/lang/golang/golang-package.mk || { echo "[diy2] 替换失败，请检查源码格式！"; exit 1; }
 echo "[diy2] 已成功将 GOTOOLCHAIN 修改为 auto"
 
-# . 【关键一步】重新刷新 feeds 索引并安装软链接
+# 6. 【关键一步】重新刷新 feeds 索引并安装软链接
 echo "[diy2] 正在刷新 feeds 索引..."
 ./scripts/feeds update packages
 ./scripts/feeds install -p packages -f golang xray-core v2ray-geodata
 
-# 6. 【补上这一行】刷新配置，让新版 golang1.27/host 和缺失的依赖生效
+# 7. 【补上这一行】刷新配置，让新版 golang1.27/host 和缺失的依赖生效
 make defconfig > /dev/null 2>&1
 
 
-# 6. 打印版本号确认
+# 8. 打印版本号确认
 GO_VER=$(grep -m1 'GO_VERSION:=' feeds/packages/lang/golang/golang-values.mk 2>/dev/null | cut -d'=' -f2 | tr -d ' ' || echo "最新版")
 echo "[diy2] ========================================"
 echo "[diy2] golang: $GO_VER"
